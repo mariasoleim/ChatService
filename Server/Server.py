@@ -10,6 +10,7 @@ must be written here (e.g. a dictionary for connected clients)
 
 connected_users = {}
 
+
 def login(client_handler, username):
     if not username.isalnum():
         client_handler.send_error('Username can only contain letters and numbers.')

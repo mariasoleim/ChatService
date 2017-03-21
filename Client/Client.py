@@ -27,13 +27,14 @@ class Client:
             user_input = input(">> ")
             try:
                 req, cont = user_input.split(" ")
-                payload = {
-                    'request': req,
-                    'content': cont
-                }
-                self.send_payload(payload)
             except ValueError:
-                print("Input must be two words.")
+                req = user_input
+                cont = 'None'
+            payload = {
+                'request': req,
+                'content': cont
+            }
+            self.send_payload(payload)
 
     def disconnect(self):
         # TODO: Handle disconnection

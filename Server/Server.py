@@ -62,7 +62,12 @@ class ClientHandler(socketserver.BaseRequestHandler):
             payload = json.loads(received_string)
             req = payload['request']
             cont = payload['content']
-            requests[req.lower()](self, cont)
+            if req in requests.keys():
+                print(7)
+                requests[req.lower()](self, cont)
+            else:
+                print(8)
+                self.send_error('Do not reqognize the request.')
 
     def send_error(self, content):
         self.send('server', 'error', content)

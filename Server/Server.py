@@ -12,9 +12,9 @@ connected_users = {}
 
 def login(client_handler, username):
     if not username.isalnum():
-        print("Username can only contain letters and numbers.")
+        print("Username can only contain letters and numbers.") #parse_error
     elif username in connected_users.keys() :
-        print("Username is already taken.")
+        print("Username is already taken.") #parse_error
     else:
         connected_users[username] = client_handler
         client_handler.send('server', 'info', 'Login successful')

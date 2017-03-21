@@ -12,31 +12,30 @@ connected_users = {}
 messages = []
 
 def login(client_handler, username):
-    ips = []
-    for handler in connected_users.keys():
-        ips.append(handler.ip)
     if not username.isalnum():
         client_handler.send_error('Username can only contain letters and numbers.')
     elif username in connected_users.values():
         client_handler.send_error('Username is already taken.')
-    elif client_handler.ip in ips:
+    elif user_logged_in(client_handler.ip):
         client_handler.send_error('You are already connected.')
     else:
         connected_users[client_handler] = username
         client_handler.send_info('Login successful.')
+        client_handler.send_history(messages)
 
 def logout(client_handler, self):
-    # Not finished
-    pass
+    del connected_users[client_handler]
+    client_handler.send_info('Logout successful.')
 
 def msg(client_handler, content):
     message = {
         'timestamp': '{:%x - %X}'.format(datetime.datetime.now()),
-        'sender': 'username',
+        'sender': connected_users.get(client_handler),
         'response': 'message',
         'content': content
     }
     payload = json.dumps(message).encode()
+    messages.append(payload)
     for handler in connected_users.keys():
         handler.connection.send(payload)
 
@@ -49,6 +48,13 @@ def names(client_handler, foo):
 
 def help(client_handler):
     pass
+
+def user_logged_in(ip):
+    for handler in connected_users.keys():
+        if handler.ip == ip:
+            return True
+    return False
+
 
 requests = {
     'login': login,
@@ -80,16 +86,23 @@ class ClientHandler(socketserver.BaseRequestHandler):
             payload = json.loads(received_string)
             req = payload['request']
             cont = payload['content']
-            if req in requests.keys():
-                requests[req.lower()](self, cont)
-            else:
+            if not user_logged_in(self.ip) and req != 'login' and req != 'help':
+                    self.send_error("Use can only use 'login <username> or 'help' when you are not logged in.")
+            elif req not in requests.keys():
                 self.send_error('Do not reqognize the request.')
+            else:
+                requests[req.lower()](self, cont)
 
     def send_error(self, content):
         self.send('server', 'error', content)
 
     def send_info(self, content):
         self.send('server', 'info', content)
+
+    def send_history(self, messages):
+        for payload in messages:
+            payload = json.loads(payload.decode())['content']
+            self.send('server', 'history', payload)
 
     def send(self, sender, response, content):
         message = {

@@ -38,4 +38,4 @@ class MessageParser():
         print('\n')
 
     def parse_history(self, payload):
-        pass
+        print('\n\nTimestamp: ' + payload['timestamp'] + '\nSender: ' + payload['sender'] + '\nMessage: ' + payload['content'])

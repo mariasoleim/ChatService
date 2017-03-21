@@ -40,12 +40,14 @@ class Client:
         pass
 
     def receive_message(self, message):
-        message = json.loads(message)
-        print()
-        print(message['timestamp'])
-        print(message['sender'])
-        print(message['response'])
-        print(message['content'])
+        self.message_parser.parse(message)
+
+        #message = json.loads(message)
+        #print()
+        #print(message['timestamp'])
+        #print(message['sender'])
+        #print(message['response'])
+        #print(message['content'])
 
     def send_payload(self, data):
         payload = json.dumps(data)

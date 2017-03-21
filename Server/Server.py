@@ -12,12 +12,12 @@ connected_users = {}
 
 def login(client_handler, username):
     if not username.isalnum():
-        print("Username can only contain letters and numbers.") #parse_error
-    elif username in connected_users.keys() :
-        print("Username is already taken.") #parse_error
+        client_handler.send_error('Username can only contain letters and numbers.')
+    elif username in connected_users.keys():
+        client_handler.send_error('Username is already taken.')
     else:
         connected_users[username] = client_handler
-        client_handler.send('server', 'info', 'Login successful')
+        client_handler.send_info('Login successful.')
 
 def logout(self):
     print("logout")
@@ -50,6 +50,12 @@ class ClientHandler(socketserver.BaseRequestHandler):
             req = payload['request']
             cont = payload['content']
             requests[req.lower()](self, cont)
+
+    def send_error(self, content):
+        self.send('server', 'error', content)
+
+    def send_info(self, content):
+        self.send('server', 'info', content)
 
     def send(self, sender, response, content):
         message = {

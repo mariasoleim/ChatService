@@ -5,14 +5,10 @@ from MessageReceiver import MessageReceiver
 from MessageParser import MessageParser
 
 class Client:
-    """
-    This is the chat client class
-    """
 
     def __init__(self, host, server_port):
         self.host = host
         self.server_port = server_port
-
         # Set up the socket connection to the server
         self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.message_parser = MessageParser()
@@ -42,13 +38,6 @@ class Client:
 
     def receive_message(self, message):
         self.message_parser.parse(message)
-
-        #message = json.loads(message)
-        #print()
-        #print(message['timestamp'])
-        #print(message['sender'])
-        #print(message['response'])
-        #print(message['content'])
 
     def send_payload(self, data):
         payload = json.dumps(data)

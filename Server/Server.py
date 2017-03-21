@@ -9,25 +9,43 @@ must be written here (e.g. a dictionary for connected clients)
 """
 
 connected_users = {}
-
+messages = []
 
 def login(client_handler, username):
+    ips = []
+    for handler in connected_users.values():
+        ips.append(handler.ip)
     if not username.isalnum():
         client_handler.send_error('Username can only contain letters and numbers.')
     elif username in connected_users.keys():
         client_handler.send_error('Username is already taken.')
+    elif client_handler.ip in ips:
+        client_handler.send_error('You are already connected.')
     else:
         connected_users[username] = client_handler
         client_handler.send_info('Login successful.')
 
-def logout(self):
-    print("logout")
-
-def msg(client_handler, message):
+def logout(client_handler, self):
+    # Not finished
     pass
 
-def names(client_handler, names):
-    pass
+def msg(client_handler, content):
+    message = {
+        'timestamp': '{:%x - %X}'.format(datetime.datetime.now()),
+        'sender': 'username',
+        'response': 'message',
+        'content': content
+    }
+    payload = json.dumps(message).encode()
+    for handler in connected_users.values():
+        handler.connection.send(payload)
+
+def names(client_handler, foo):
+    names = 'Connected users:'
+    for name in connected_users.keys():
+        names += '\n'
+        names += name
+    client_handler.send_info(names)
 
 def help(client_handler):
     pass
@@ -63,10 +81,8 @@ class ClientHandler(socketserver.BaseRequestHandler):
             req = payload['request']
             cont = payload['content']
             if req in requests.keys():
-                print(7)
                 requests[req.lower()](self, cont)
             else:
-                print(8)
                 self.send_error('Do not reqognize the request.')
 
     def send_error(self, content):

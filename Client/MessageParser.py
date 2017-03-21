@@ -22,17 +22,20 @@ class MessageParser():
         print('\n\n' + payload['timestamp'])
         print('An error has occured:')
         print(payload['content'])
-        print('\n\n')
+        print('\n')
 
     def parse_info(self, payload):
         print('\n\n' + payload['timestamp'])
         print('Info from server:')
         print(payload['content'])
-        print('\n\n')
+        print('\n')
 
 
     def parse_message(self, payload):
-        pass
+        print('\n\n' + payload['timestamp'])
+        print('Message from ' + payload['sender'] + ':')
+        print(payload['content'])
+        print('\n')
 
     def parse_history(self, payload):
         pass

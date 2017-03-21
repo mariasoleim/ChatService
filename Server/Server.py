@@ -13,16 +13,16 @@ messages = []
 
 def login(client_handler, username):
     ips = []
-    for handler in connected_users.values():
+    for handler in connected_users.keys():
         ips.append(handler.ip)
     if not username.isalnum():
         client_handler.send_error('Username can only contain letters and numbers.')
-    elif username in connected_users.keys():
+    elif username in connected_users.values():
         client_handler.send_error('Username is already taken.')
     elif client_handler.ip in ips:
         client_handler.send_error('You are already connected.')
     else:
-        connected_users[username] = client_handler
+        connected_users[client_handler] = username
         client_handler.send_info('Login successful.')
 
 def logout(client_handler, self):
@@ -37,12 +37,12 @@ def msg(client_handler, content):
         'content': content
     }
     payload = json.dumps(message).encode()
-    for handler in connected_users.values():
+    for handler in connected_users.keys():
         handler.connection.send(payload)
 
 def names(client_handler, foo):
     names = 'Connected users:'
-    for name in connected_users.keys():
+    for name in connected_users.values():
         names += '\n'
         names += name
     client_handler.send_info(names)

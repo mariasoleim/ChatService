@@ -17,7 +17,7 @@ def login(client_handler, username):
         print("Username is already taken.")
     else:
         connected_users[username] = client_handler
-        client_handler.send("Welcome " + username)
+        client_handler.send('server', 'info', 'Login successful')
 
 def logout(self):
     print("logout")
@@ -51,16 +51,15 @@ class ClientHandler(socketserver.BaseRequestHandler):
             cont = payload['content']
             requests[req.lower()](self, cont)
 
-    def send(self, payload):
+    def send(self, sender, response, content):
         message = {
             'timestamp': '{:%x - %X}'.format(datetime.datetime.now()),
-            'sender': 'username',
-            'response': 'response',
-            'content': 'content'
+            'sender': sender,
+            'response': response,
+            'content': content
         }
         payload = json.dumps(message).encode()
         self.connection.send(payload)
-        print("Message hopefully sent")
 
 
 

@@ -22,9 +22,21 @@ def login(client_handler, username):
 def logout(self):
     print("logout")
 
+def msg(client_handler, message):
+    pass
+
+def names(client_handler, names):
+    pass
+
+def help(client_handler):
+    pass
+
 requests = {
     'login': login,
-    'logout': logout
+    'logout': logout,
+    'msg': msg,
+    'names': names,
+    'help': help
 }
 
 class ClientHandler(socketserver.BaseRequestHandler):

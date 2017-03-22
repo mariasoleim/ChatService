@@ -49,8 +49,11 @@ def names(client_handler, foo):
         names += name
     client_handler.send_info(names)
 
-def help(client_handler):
-    pass
+def help(client_handler, foo):
+    helpString = 'login <username> - login\nlogout - logout\n'
+    helpString2 = 'msg <message> - send a message to everyone\n'
+    helpString3 = 'names - list all the users in the chat'
+    client_handler.send_info(helpString + helpString2 + helpString3)
 
 def user_logged_in(ip):
     for handler in connected_users.keys():

@@ -20,7 +20,10 @@ def login(client_handler, username):
         client_handler.send_error('You are already connected.')
     else:
         connected_users[client_handler] = username
-        client_handler.send_info('Login successful.')
+        info = 'Login successful.'
+        if (len(messages) > 0):
+            info += '\n\nErlier messages:'
+        client_handler.send_info(info)
         client_handler.send_history(messages)
 
 def logout(client_handler, self):
@@ -101,7 +104,7 @@ class ClientHandler(socketserver.BaseRequestHandler):
 
     def send_history(self, messages):
         for payload in messages:
-            payload = json.loads(payload.decode())['content']
+            payload = json.loads(payload.decode())
             self.send('server', 'history', payload)
 
     def send(self, sender, response, content):

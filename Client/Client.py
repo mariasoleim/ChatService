@@ -22,7 +22,7 @@ class Client:
         while True:
             user_input = input(">> ")
             try:
-                req, cont = user_input.split(" ")
+                req, cont = user_input.split(" ", 1)
             except ValueError:
                 req = user_input
                 cont = 'None'

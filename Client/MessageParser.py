@@ -19,16 +19,14 @@ class MessageParser():
             pass
 
     def parse_error(self, payload):
-        print('\n\n' + payload['timestamp'])
+        print('\n' + payload['timestamp'])
         print('An error has occured:')
         print(payload['content'])
-        print('\n')
 
     def parse_info(self, payload):
-        print('\n\n' + payload['timestamp'])
+        print('\n' + payload['timestamp'])
         print('Info from server:')
         print(payload['content'])
-        print('\n')
 
 
     def parse_message(self, payload):
@@ -38,4 +36,4 @@ class MessageParser():
         print('\n')
 
     def parse_history(self, payload):
-        print('\n\nTimestamp: ' + payload['timestamp'] + '\nSender: ' + payload['sender'] + '\nMessage: ' + payload['content'])
+        print('\nTimestamp: ' + payload['content']['timestamp'] + '\nSender: ' + payload['content']['sender'] + '\nMessage: ' + payload['content']['content'])

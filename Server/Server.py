@@ -92,7 +92,7 @@ class ClientHandler(socketserver.BaseRequestHandler):
             if not user_logged_in(self.ip) and req != 'login' and req != 'help':
                     self.send_error("Use can only use 'login <username> or 'help' when you are not logged in.")
             elif req not in requests.keys():
-                self.send_error('Do not reqognize the request.')
+                self.send_error('Do not recognize the request.')
             else:
                 requests[req.lower()](self, cont)
 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import socket
 import json
+import time
 from MessageReceiver import MessageReceiver
 from MessageParser import MessageParser
 
@@ -20,7 +21,7 @@ class Client:
         self.message_receiver = MessageReceiver(self, self.connection)
 
         while True:
-            user_input = input(">> ")
+            user_input = input()
             try:
                 req, cont = user_input.split(" ", 1)
             except ValueError:
@@ -42,10 +43,6 @@ class Client:
     def send_payload(self, data):
         payload = json.dumps(data)
         self.connection.send(payload.encode())
-
-
-    # More methods may be needed!
-
 
 if __name__ == '__main__':
     """
